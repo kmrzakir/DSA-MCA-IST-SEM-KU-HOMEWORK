@@ -116,6 +116,17 @@ void deleteAtTheEnd(Node* head){
     temp->link = NULL;
 }
 
+void findForAndElement(Node* head,int num){
+    while(head != NULL){
+        if(head->data == num){
+            cout <<"Element "<<num<<" is present is linked list";
+            return;
+        }
+        head = head->link;
+    }
+    cout << "Element "<< num << " is not present in the linked list";
+}
+
 int main()
 {
     Node* head = NULL;
@@ -127,10 +138,11 @@ int main()
     // insertAtParticularPosition(head,99,2);
     // deleteAtBeggning(head);
 
-    deleteAtTheEnd(head);
+    // deleteAtTheEnd(head);
 
+    // display(head);
 
-    display(head);
+    findForAndElement(head,30);
 
     return 0;
 }

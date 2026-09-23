@@ -130,19 +130,77 @@ void findForAndElement(Node* head,int num){
 int main()
 {
     Node* head = NULL;
-
+    cout << "ENTER THE ELEMENTS TO CREATE THE LINKED LIST : " << endl;
     head = inserElements(head);
 
-    // inserAtBiggneing(head, 77);
-    // insertAtEnd(head,88);
-    // insertAtParticularPosition(head,99,2);
-    // deleteAtBeggning(head);
+    cout << "THR LINKED-LIST IS : ";
+    display(head);
 
-    // deleteAtTheEnd(head);
+    while(true){
+        cout << endl << "ENTER THE CHOICE : " << endl;
 
-    // display(head);
+        cout <<"1 => TO INSERT AN ELEMENT AT THE BIGGNEING : " <<endl;
+        cout <<"2 => TO INSERT AN ELEMENT AT THE END : " <<endl;
+        cout <<"3 => TO INSERT AN ELEMENT AT ANY PARTICULAR POSITION : " <<endl;
+        cout <<"4 => DELETE AN ELEMENT AT THE BIGGNING : " <<endl;
+        cout <<"5 => DELETE AN ELEMENT AT THE END : " <<endl;
+        cout <<"6 => FIND FOR AN ELEMENT IN A LINKED-LIST : " <<endl;
+        cout <<"7 => DISPLAY THE LINKED-LIST : "<<endl;
+        cout <<"-1 => ENTER -1 TO QUIT THE PROGRAM : "<<endl;
 
-    findForAndElement(head,30);
-
+        int choice;
+        cin >>choice;
+        int num,position;
+        switch (choice)
+        {
+        case 1:
+            cout <<"ENTER AN ELEMENT TO INSERT AT THE BIGGNING OF THE LINKED-LIST : "<<endl;
+            cin >>num;
+            inserAtBiggneing(head,num);
+            cout <<"LINKED-LIST AFTER INSERTING AN ELEMENT AT THE BEGGNING OF THE LINKED-LIST IS : ";
+            display(head);
+            break;
+        case 2:
+            cout <<"ENTER AN ELEMENT TO INSERT AT THE END OF THE LINKED-LIST : "<<endl;
+            cin >>num;
+            insertAtEnd(head,num);
+            cout <<"LINKED-LIST AFTER INSERTING AN ELEMENT AT THE END OF THE LINKED-LIST IS : ";
+            display(head);
+            break;
+        case 3:
+            cout <<"ENTER AN ELEMENT TO INSERT AT PARTICULAR POSITION OF LINKED-LIST : "<<endl;
+            int position;
+            cin >>num;
+            cout <<"ENTER THE POSITION WHERE YOU WANNA INSERT "<< num << " ELEMENT"<<endl;
+            cin >>position;
+            insertAtParticularPosition(head,num,position);
+            cout <<"LINKED-LIST AFTER INSERTING AN ELEMENT AT A PARTICULAT POSITION OF THE LINKED-LIST IS : ";
+            display(head);
+            break;
+        case 4:
+            deleteAtBeggning(head);
+            cout <<"LINKED LIST AFTER DELETING AN ELEMENT AT THE BIGGNING : "<<endl;
+            display(head);
+            break;
+        case 5:
+            deleteAtTheEnd(head);
+            cout <<"LINKED LIST AFTER DELETING AN ELEMENT AT THE END : "<<endl;
+            display(head);
+            break;
+        case 6:
+            cout <<"ENTER AN ELEMENT WHICH YOU WANNA FIND IN THE LINKED-LIST : "<<endl;
+            cin>>num;
+            findForAndElement(head,num);
+            break;
+        case 7:
+            cout <<"THE LINKED LIST IS : " << endl;
+            display(head);
+        case -1:
+            return 0;
+        
+        default:
+            return 0;
+        }
+    }
     return 0;
 }

@@ -1,0 +1,125 @@
+<div id="bubble-sort-demo">
+  <style>
+    #bubble-sort-demo { display: grid; gap: calc(var(--font-size-base) * 1); }
+    #bubble-sort-demo h1 { margin: 0; }
+    #bubble-sort-demo .sort-bars { display: flex; align-items: end; gap: 10px; min-height: 190px; padding: 12px 0 0; }
+    #bubble-sort-demo .sort-item { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: end; gap: 6px; min-width: 0; }
+    #bubble-sort-demo .sort-bar { width: min(100%, 64px); height: calc(var(--bar-value) * 5px); min-height: 28px; display: flex; align-items: start; justify-content: center; padding-top: 5px; border-radius: 6px 6px 0 0; background: var(--viz-series-1); color: var(--primary-foreground); transition: height 260ms ease, background-color 180ms ease; }
+    #bubble-sort-demo .sort-bar.comparing { background: var(--viz-series-2); }
+    #bubble-sort-demo .sort-bar.swapping { background: var(--viz-series-3); }
+    #bubble-sort-demo .sort-bar.sorted { background: var(--viz-series-4); }
+    #bubble-sort-demo .sort-index { color: var(--muted-foreground); }
+    #bubble-sort-demo .sort-status { min-height: 1.5em; }
+    @media (max-width: 420px) { #bubble-sort-demo .sort-bars { gap: 5px; } #bubble-sort-demo .sort-bar { padding-top: 3px; } }
+    @media (prefers-reduced-motion: reduce) { #bubble-sort-demo .sort-bar { transition: none; } }
+  </style>
+  <h1>Bubble sort</h1>
+  <div class="sort-bars" role="img" aria-label="Bubble sort bar chart"></div>
+  <div class="sort-status" aria-live="polite"></div>
+  <div class="viz-controls" aria-label="Sort controls">
+    <button class="btn btn-primary" type="button" data-action="next">Next step</button>
+    <button class="btn" type="button" data-action="play">Auto play</button>
+    <button class="btn btn-ghost" type="button" data-action="reset">Reset</button>
+  </div>
+  <div class="text-small" aria-label="Color key">Blue: compare · Orange: swap · Green: in place</div>
+  <script>
+    (() => {
+      const root = document.getElementById('bubble-sort-demo');
+      const bars = root.querySelector('.sort-bars');
+      const status = root.querySelector('.sort-status');
+      const nextButton = root.querySelector('[data-action="next"]');
+      const playButton = root.querySelector('[data-action="play"]');
+      const initial = [5, 1, 4, 2, 8];
+      let values = [...initial];
+      let i = 0;
+      let passEnd = values.length - 1;
+      let swapsThisPass = 0;
+      let done = false;
+      let timer = null;
+
+      function render(active = [], swapping = [], message = 'Press “Next step” to compare the first pair.') {
+        bars.replaceChildren();
+        values.forEach((value, index) => {
+          const item = document.createElement('div');
+          item.className = 'sort-item';
+          const bar = document.createElement('div');
+          bar.className = 'sort-bar';
+          bar.style.setProperty('--bar-value', value);
+          bar.textContent = value;
+          if (index >= passEnd && done) bar.classList.add('sorted');
+          else if (index >= passEnd && passEnd < initial.length - 1) bar.classList.add('sorted');
+          if (active.includes(index)) bar.classList.add('comparing');
+          if (swapping.includes(index)) bar.classList.add('swapping');
+          bar.setAttribute('aria-label', `Value ${value} at position ${index + 1}`);
+          const label = document.createElement('span');
+          label.className = 'sort-index text-small';
+          label.textContent = `${index + 1}`;
+          item.append(bar, label);
+          bars.append(item);
+        });
+        status.textContent = message;
+        nextButton.disabled = done;
+      }
+
+      function step() {
+        if (done) return;
+        if (i >= passEnd) {
+          if (swapsThisPass === 0) {
+            done = true;
+            stop();
+            passEnd = 0;
+            render([], [], 'Already sorted — no swaps in this pass.');
+            return;
+          }
+          passEnd -= 1;
+          i = 0;
+          swapsThisPass = 0;
+          if (passEnd <= 0) {
+            done = true;
+            stop();
+            passEnd = 0;
+            render([], [], 'Sorted! Each pass moves the largest remaining value to the end.');
+            return;
+          }
+        }
+        const left = i;
+        const right = i + 1;
+        const a = values[left];
+        const b = values[right];
+        if (a > b) {
+          values[left] = b;
+          values[right] = a;
+          swapsThisPass += 1;
+          render([left, right], [left, right], `Compare ${a} and ${b}: ${a} is larger, so swap them.`);
+        } else {
+          render([left, right], [], `Compare ${a} and ${b}: already in order, so leave them.`);
+        }
+        i += 1;
+      }
+
+      function stop() {
+        if (timer) window.clearInterval(timer);
+        timer = null;
+        playButton.textContent = 'Auto play';
+      }
+
+      nextButton.addEventListener('click', step);
+      playButton.addEventListener('click', () => {
+        if (timer) { stop(); return; }
+        if (done) return;
+        playButton.textContent = 'Pause';
+        timer = window.setInterval(step, 850);
+      });
+      root.querySelector('[data-action="reset"]').addEventListener('click', () => {
+        stop();
+        values = [...initial];
+        i = 0;
+        passEnd = values.length - 1;
+        swapsThisPass = 0;
+        done = false;
+        render();
+      });
+      render();
+    })();
+  </script>
+</div>

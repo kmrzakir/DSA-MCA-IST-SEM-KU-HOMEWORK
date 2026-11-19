@@ -2,92 +2,83 @@
 #include <vector>
 using namespace std;
 
-
 class Graph
 {
+
     public:
-    vector<vector<int>> adjmatrix;
-    int vertices,edges;
-    void createGraph()
+        int vertices,edges;
+        vector<vector<int>> adjMatrix;
+        vector<vector<int>> adjList;
+        // undirected and un-weighted graph
+        void createGraphAdjacencyMatrix()
+        {   
+            int i,j;
+            cout << "ENTER THE NUMBER OF VERTICESIN THE GRAPH : "<<endl;
+            cin >> vertices;
+            adjMatrix.resize(vertices,vector<int>(vertices));
+            cout << "ENTER THE NUMBER OF EDGES : ";
+            cin >> edges;
+            for(int k = 0; k < edges;k++)
+            {
+                cout << "ENTER THE TWO VERTICES : ";
+                cin >> i >> j;
+                adjMatrix[i][j] = 1;
+                adjMatrix[j][i] = 1;
+            }
+
+        }
+
+        // from here display the adj matrix
+        void displayAdjMatrix()
+        {
+            for(int i = 0; i < vertices;i++)
+            {
+                for(int j = 0; j < vertices; j++)
+                {
+                    cout << adjMatrix[i][j] << "  ";
+                }
+                cout << endl;
+            }
+        }
+
+    // VREAT THE GRAPH USING ADJENCY LIST
+    void createGraphAdjencyList()
     {
-        cout << "Enter the number of vertices : ";
+        cout << "ENTER THE NUMBER OF VERTICIES : ";
         cin >> vertices;
-        cout << "Enter the number of edges : ";
+        cout << "ENTER THE NUMBER OF EDGES : ";
         cin >> edges;
-        adjmatrix.resize(vertices, vector<int>(vertices, 0));
-        for(int i = 0; i < edges; i++)
+        adjList.resize(vertices);
+
+        for(int i = 0; i < edges;i++)
         {
-            int u, v,w;
-            cout << "Enter the edge (u, v) and weight w : ";
-            cin >> u >> v >> w;
-            adjmatrix[u][v] = w;
-            adjmatrix[v][u] = w;
+            int k,j;
+            cout << "ENTER THE TWO VERTICE FOR EDGE : ";
+            cin >> k >> j;
+            adjList[k].push_back(j);
+            adjList[j].push_back(k);
         }
     }
-    void displayGraph()
+
+    // dispaly the adjency list
+    void displayAdjList()
     {
-        cout << "Adjacency Matrix : " << endl;
-        for(int i = 0; i < vertices; i++)
+        for(int i = 0; i< vertices;i++)
         {
-            for(int j = 0; j < vertices; j++)
+            cout << i << " --> ";
+            for(int j = 0; j < adjList[i].size();j++)
             {
-                cout << adjmatrix[i][j] << "  ";
+                cout << adjList[i][j] << "  ";
             }
             cout << endl;
         }
     }
-
-    void adjListCreate()
-    {
-        int vertex,edges;
-        int u , v;
-        cout << "Enter the number of vertex : ";
-        cin >> vertex;
-        vector<int> adjList[vertex];
-        cout << "Enter the number of edges : ";
-        cin >> edges;
-
-        for(int i = 0; i < edges; i++)
-        {
-            
-            cout << "Enter the edges (u,v) : ";
-            cin >> u >> v;
-            adjList[u].push_back(v);
-            adjList[v].push_back(u);
-        }
-
-        // diplay the adjvectore
-
-         for(int i = 0; i < vertex; i++)
-        {
-            cout << i << "--> ";
-            for(int j = 0; j < adjList[i].size(); j++)
-            {
-                cout<< adjList[i][j] << "  ";
-            }
-            cout << endl;
-        }
-    }
-
-    // void adjListDisplay(vectore<int> v, int v)
-    // {
-    //     for(int i = 0; i < v; i++)
-    //     {
-    //     for(int j = 0; j < adjList[i].size; i++)
-    //     {
-    //         cout<< adjList[i][j];
-    //     }
-    //     cout << endl;
-    //     }
-    // }
 };
 
 int main()
 {
-    Graph *gf = new Graph();
-    // gf->createGraph();
-    // gf->displayGraph();
-
-    gf->adjListCreate();
+    Graph* gr = new Graph();
+    gr->createGraphAdjencyList();
+    gr->displayAdjList();
     return 0;
 }

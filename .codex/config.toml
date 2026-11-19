@@ -1,0 +1,13 @@
+# Ask before higher-risk actions, while allowing normal agentic work
+approval_policy = "on-request"
+
+# Codex can access and modify files outside the current workspace
+sandbox_mode = "danger-full-access" 
+
+# Default model used by Codex
+model = "gpt-5.4"
+
+# Reasoning and response style
+model_reasoning_effort = "medium"
+model_verbosity = "medium"
+personality = "pragmatic"

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 using namespace std;
 
 class Graph
@@ -68,6 +69,33 @@ class Graph
             }
         }
 
+        // DO THE BFS FROM HERE
+        public:
+        vector<int> bfs()
+        {
+            vector<bool> visited(vertices,false);
+            vector<int> answer;
+            queue<int> q;
+
+            q.push(0);
+            visited[0] = true;
+            while(!q.empty())
+            {
+                int current = q.front();
+                q.pop();
+                answer.push_back(current);
+                for(int neighbour : adjList[current])
+                {
+                    if(!visited[neighbour])
+                    {
+                        visited[neighbour] = true;
+                        q.push(neighbour);
+                    }
+                }
+            }
+            return answer;
+        }
+
 };
 
 int main()
@@ -75,5 +103,12 @@ int main()
     Graph* gr = new Graph();
     gr->createAdjList();
     gr->displayAdjList();
+    // cout << gr->bfs();
+    vector<int> ans = gr->bfs();
+
+    for(int x : ans)
+    {
+        cout<<x<< "  ";
+    }
     return 0;
 }

@@ -1,0 +1,13 @@
+
+name: this is the name
+
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile
+      - run: g++ start.cpp -o start

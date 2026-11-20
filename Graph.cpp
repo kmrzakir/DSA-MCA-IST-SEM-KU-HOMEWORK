@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <stack>
 using namespace std;
 
 class Graph
@@ -96,6 +97,49 @@ class Graph
             return answer;
         }
 
+
+        // DFS USING RECURSION
+        void dfs(int node,vector<bool>& visited,vector<int>& answer,const vector<vector<int>>& adjList)
+        {
+            visited[node] = true;
+            answer.push_back(node);
+            for(int x : adjList[node])
+            {
+                if(!visited[x])
+                {
+                    dfs(x,visited,answer,adjList);
+                }
+            }
+        }
+        // DFS USING STACK
+        vector<int> dfs_stack()
+        {
+            vector<int> answer;
+            vector<bool> visited(vertices,false);
+            stack<int> st;
+            st.push(0);
+            while(!st.empty())
+            {
+                int current = st.top();
+                st.pop();
+                if(!visited[current])
+                {
+                    answer.push_back(current);
+                    visited[current] = true;
+                    for(int i = 0; i < adjList[current].size(); i++)
+                    {
+                        int neighbour = adjList[current][i];
+                        if(!visited[neighbour])
+                        {
+                            st.push(neighbour);
+                        }
+                    }
+                    
+                }               
+            }
+            return answer;
+        }
+
 };
 
 int main()
@@ -104,9 +148,13 @@ int main()
     gr->createAdjList();
     gr->displayAdjList();
     // cout << gr->bfs();
-    vector<int> ans = gr->bfs();
 
-    for(int x : ans)
+    vector<bool> visited(gr->vertices,false);
+    vector<int> answer;
+
+    answer = gr->dfs_stack();
+
+    for(int x : answer)
     {
         cout<<x<< "  ";
     }
